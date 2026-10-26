@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Qryptera | Security for the post-quantum era</title>
+<meta name="description" content="Quantum computers will break the cryptography that protects today's chips. Qryptera is building post-quantum security into silicon. Coming soon.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="[SITE URL]/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect width='26' height='26' fill='%23000'/%3E%3Ccircle cx='12' cy='12' r='8.5' fill='none' stroke='%23F5F5F5' stroke-width='1.8'/%3E%3Cpath d='M15.5 15.5 22 22' stroke='%23F5F5F5' stroke-width='1.8'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%235BF0FF'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Qryptera">
+<meta property="og:title" content="Qryptera | Security for the post-quantum era">
+<meta property="og:description" content="Post-quantum security, built into silicon. Coming soon.">
+<meta property="og:url" content="[SITE URL]/">
+<meta property="og:image" content="[SITE URL]/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a fixed particle field behind seven scroll scenes; one line of text per scene, set low-left like a film title card. */
+:root{
+  color-scheme:dark;
+  --accent:#5BF0FF;
+  --bg:#000000;
+  --fg:#F5F5F5;
+  --muted:#9C9C9C;
+  --dim:#6E6E6E;
+  --line:#262626;
+  --sans:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#field{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.75) 100%)}
+
+/* chrome */
+.top{position:fixed;left:0;right:0;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(18px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 18px max(20px,env(safe-area-inset-left,0px))}
+.brand{display:inline-flex;align-items:center;gap:12px;min-height:44px;color:var(--fg);text-decoration:none;font-family:var(--sans);font-weight:400;font-size:13px;letter-spacing:.42em}
+.brand svg{flex:none}
+.req{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid rgba(255,255,255,.22);color:var(--fg);text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;background:rgba(0,0,0,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .3s,background-color .3s}
+.req:hover{border-color:var(--fg);background:rgba(255,255,255,.06)}
+
+.rail{position:fixed;right:max(18px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:5;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.rail button{display:flex;align-items:center;justify-content:flex-end;gap:10px;width:44px;height:30px;background:none;border:0;padding:0;cursor:pointer;color:var(--dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em}
+.rail button span{opacity:0;transition:opacity .3s}
+.rail button::after{content:"";width:12px;height:1px;background:currentColor;transition:width .4s,background-color .4s}
+.rail button[aria-current="true"]{color:var(--fg)}
+.rail button[aria-current="true"]::after{width:26px}
+.rail button[aria-current="true"] span,.rail button:hover span{opacity:1}
+@media(max-width:700px){.rail{display:none}}
+
+/* text layers */
+.stage{position:fixed;inset:0;z-index:4;pointer-events:none}
+.card{position:absolute;left:max(24px,env(safe-area-inset-left,0px));right:max(24px,env(safe-area-inset-right,0px));bottom:calc(14vh + env(safe-area-inset-bottom,0px));max-width:820px;
+  opacity:0;filter:blur(14px);transform:translateY(22px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),filter 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1),visibility 0s linear 1s}
+.card.on{transition-delay:0s}
+@media(min-width:900px){.card{left:max(7vw,env(safe-area-inset-left,0px));bottom:auto;top:50%;transform:translateY(calc(-50% + 22px));max-width:min(44vw,680px)}}
+.card{visibility:hidden}
+.card.on{opacity:1;filter:none;transform:none;pointer-events:auto;visibility:visible}
+@media(min-width:900px){.card.on{transform:translateY(-50%)}
+  .card.r{left:auto;right:max(9vw,env(safe-area-inset-right,0px))}}
+.num{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;display:flex;gap:14px;align-items:center}
+.num::after{content:"";width:40px;height:1px;background:var(--line)}
+.line{margin:22px 0 0;font-weight:300;font-size:clamp(1.9rem,4.4vw,3.9rem);line-height:1.08;letter-spacing:-.028em;text-wrap:balance}
+.line em{font-style:normal;color:var(--accent)}
+.cap{margin-top:22px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+/* hero */
+.card.hero{left:0;right:0;max-width:none;top:auto;bottom:calc(9vh + env(safe-area-inset-bottom,0px));text-align:center;transform:translateY(22px)}
+.card.hero.on{transform:none}
+.hero h1{margin:0;font-size:inherit}
+.hero .tag{font-weight:200;font-size:clamp(1.15rem,2.2vw,1.7rem);letter-spacing:-.01em;color:var(--fg)}
+.cue{margin:34px auto 0;display:flex;flex-direction:column;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.34em;color:var(--dim);text-transform:uppercase}
+.cue i{display:block;width:1px;height:44px;background:linear-gradient(var(--fg),transparent);transform-origin:top;animation:cue 2.2s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes cue{0%{transform:scaleY(0);opacity:1}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* year counter */
+.years{display:flex;align-items:baseline;gap:18px;margin-top:26px;font-family:var(--mono);font-weight:400;font-variant-numeric:tabular-nums}
+.years b{font-weight:400;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.02em;color:var(--fg)}
+.years span{font-size:12px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+.years .bar{flex:1;max-width:220px;height:1px;background:var(--line);position:relative;align-self:center}
+.years .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+
+/* final */
+.card.end .line{font-size:clamp(2.2rem,5vw,4.4rem)}
+.soon{display:inline-flex;align-items:center;gap:10px;margin-top:22px;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+.soon::before{content:"";width:6px;height:6px;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+form{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px;max-width:520px}
+form input{flex:1 1 240px;min-width:0;min-height:52px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.22);border-radius:0;color:var(--fg);font:inherit;font-size:16px;font-weight:400;padding:0 16px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+form input::placeholder{color:#777}
+form input:focus{outline:none;border-color:var(--fg)}
+form button{min-height:52px;padding:0 22px;background:var(--fg);color:#000;border:0;font-family:var(--sans);font-size:15px;font-weight:400;cursor:pointer;flex:0 0 auto;transition:background-color .2s}
+form button:hover{background:#fff}
+@media(max-width:480px){form button{flex:1 1 100%}}
+.msg{margin-top:12px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);min-height:1.5em}
+.msg.ok{color:#7CF0B0}
+.ask{margin:30px 0 0;max-width:520px;font-size:clamp(1rem,1.5vw,1.2rem);font-weight:300;line-height:1.5;color:var(--muted)}
+.contact{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-top:14px;max-width:520px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.contact a{display:inline-flex;align-items:center;min-height:44px;color:var(--fg);text-decoration:none;letter-spacing:.06em;text-transform:none;font-size:14px;border-bottom:1px solid rgba(255,255,255,.28);transition:color .2s,border-color .2s}
+.contact a:hover{color:var(--accent);border-color:var(--accent)}
+.legal{margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;line-height:1.8}
+
+/* scroll spacers */
+.scenes{position:relative;z-index:2}
+.scene{height:150vh}
+.scene:first-child{height:120vh}
+.scene:last-child{height:110vh}
+
+@media (prefers-reduced-motion:reduce){
+  .card{transition:opacity .3s linear;filter:none!important}
+  .cue i,.soon::before{animation:none}
+}
+</style>
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="#s0" aria-label="Qryptera, back to start">
+    <svg width="22" height="22" viewBox="0 0 26 26" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M15.5 15.5 22 22" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="2" fill="var(--accent)"/>
+    </svg>
+    QRYPTERA
+  </a>
+  <a class="req" href="#s6">Contact</a>
+</header>
+
+<ol class="rail" aria-label="Chapters">
+  <li><button type="button" data-i="0" aria-current="true" aria-label="Chapter 1: Qryptera"><span>00</span></button></li>
+  <li><button type="button" data-i="1" aria-label="Chapter 2: Trust"><span>01</span></button></li>
+  <li><button type="button" data-i="2" aria-label="Chapter 3: Harvest"><span>02</span></button></li>
+  <li><button type="button" data-i="3" aria-label="Chapter 4: Break"><span>03</span></button></li>
+  <li><button type="button" data-i="4" aria-label="Chapter 5: Silicon"><span>04</span></button></li>
+  <li><button type="button" data-i="5" aria-label="Chapter 6: Lattice"><span>05</span></button></li>
+  <li><button type="button" data-i="6" aria-label="Chapter 7: Access"><span>06</span></button></li>
+</ol>
+
+<main class="stage">
+  <section class="card hero on" data-i="0" aria-labelledby="h0">
+    <h1 id="h0" class="sr">Qryptera</h1>
+    <p class="tag">Security for the post-quantum era.</p>
+    <div class="cue" aria-hidden="true">Scroll<i></i></div>
+  </section>
+
+  <section class="card" data-i="1">
+    <p class="num">01 / Trust</p>
+    <h2 class="line">Everything digital trusts a few hard math problems.</h2>
+    <p class="cap">RSA &middot; Elliptic curves</p>
+  </section>
+
+  <section class="card r" data-i="2">
+    <p class="num">02 / Harvest</p>
+    <h2 class="line">Encrypted data can be recorded today and read later.</h2>
+    <p class="cap">Harvest now, decrypt later</p>
+  </section>
+
+  <section class="card" data-i="3">
+    <p class="num">03 / Break</p>
+    <h2 class="line">A large enough quantum computer breaks those problems.</h2>
+    <p class="cap">Shor's algorithm</p>
+  </section>
+
+  <section class="card r" data-i="4">
+    <p class="num">04 / Silicon</p>
+    <h2 class="line">Chips shipping now will still be running in the 2040s.</h2>
+    <div class="years" aria-hidden="true"><b id="yr">2026</b><span class="bar"><i id="yrbar"></i></span><span>In service</span></div>
+    <p class="cap">Silicon can't be patched</p>
+  </section>
+
+  <section class="card" data-i="5">
+    <p class="num">05 / Lattice</p>
+    <h2 class="line">The new math exists. It has to <em>reach the silicon.</em></h2>
+    <p class="cap">NIST FIPS 203 &middot; 204 &middot; 205</p>
+  </section>
+
+  <section class="card end r" data-i="6" id="access-card">
+    <p class="num">06 / Qryptera</p>
+    <h2 class="line">Post-quantum security, built into silicon.</h2>
+    <p class="soon">Coming soon</p>
+    <p class="ask">Building a chip that needs to be quantum safe? Write to us.</p>
+    <p class="contact"><span>Contact</span><a href="mailto:hello.qryptera@gmail.com">hello.qryptera@gmail.com</a></p>
+    <p class="legal"><span id="cy">2026</span> &copy; Qryptera</p>
+  </section>
+</main>
+
+<div class="scenes" aria-hidden="true">
+  <div class="scene" id="s0"></div><div class="scene" id="s1"></div><div class="scene" id="s2"></div><div class="scene" id="s3"></div><div class="scene" id="s4"></div><div class="scene" id="s5"></div><div class="scene" id="s6"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var cv = document.getElementById("field"), ctx = cv.getContext("2d");
+var DPR = Math.min(window.devicePixelRatio || 1, 2);
+var W = 0, H = 0, mobile = false;
+var ACC = [91,240,255];
+var N, DUST, P = [], shapes = [], scene = 0, last = 0, mouse = {x:-9999,y:-9999};
+var cards = document.querySelectorAll(".card"), rail = document.querySelectorAll(".rail button"), spacers = document.querySelectorAll(".scene");
+
+/* ---- shape sampling: x in [-1,1], y scaled by aspect ---- */
+function sample(w, h, draw, n){
+  var c = document.createElement("canvas"); c.width = w; c.height = h;
+  var x = c.getContext("2d"); x.fillStyle = x.strokeStyle = "#fff"; draw(x, w, h);
+  var d = x.getImageData(0,0,w,h).data, pts = [];
+  for (var y=0;y<h;y+=2) for (var i=0;i<w;i+=2){ var k=(y*w+i)*4; if (d[k+3]>110) pts.push([(i-w/2)/(w/2),(y-h/2)/(w/2), d[k]<150?1:0]); }
+  var out = []; for (var j=0;j<n;j++) out.push(pts.length ? pts[(Math.random()*pts.length)|0] : [0,0,0]);
+  return out;
+}
+function lock(x){
+  x.lineWidth = 22; x.beginPath(); x.arc(200,150,70,Math.PI,0); x.lineTo(270,190); x.moveTo(130,150); x.lineTo(130,190); x.stroke();
+  x.fillRect(95,180,210,170);
+  x.globalCompositeOperation = "destination-out"; x.fillRect(113,198,174,134); x.globalCompositeOperation = "source-over";
+  x.beginPath(); x.arc(200,250,18,0,7); x.fill(); x.fillRect(192,255,16,46);
+  x.font = "500 22px 'IBM Plex Mono', monospace"; x.textAlign = "center"; x.fillText("RSA-2048", 200, 322);
+}
+function build(){
+  var n = N - DUST;
+  shapes = [
+    sample(1400, 260, function(x,w,h){ x.font = "200 168px Inter, sans-serif"; x.textAlign="center"; x.textBaseline="middle"; if ("letterSpacing" in x) x.letterSpacing = "38px"; x.fillText("QRYPTERA", w/2 + 19, h/2 + 8); }, n),
+    sample(400, 400, lock, n),
+    null,  /* harvest: procedural */
+    null,  /* break: derived from lock */
+    sample(400, 400, function(x){
+      x.lineWidth = 3; x.strokeRect(60,60,280,280);
+      for (var i=0;i<12;i++){ var p=82+i*21.5; x.fillRect(p,40,8,14); x.fillRect(p,346,8,14); x.fillRect(40,p,14,8); x.fillRect(346,p,14,8); }
+      x.globalAlpha=.55; x.fillRect(130,130,140,140); x.globalAlpha=1;
+      x.globalCompositeOperation="destination-out"; for (var a=0;a<6;a++){ x.fillRect(130+a*24,130,3,140); x.fillRect(130,130+a*24,140,3);} x.globalCompositeOperation="source-over";
+      x.lineWidth=2; x.strokeRect(130,130,140,140);
+      x.fillStyle="#00ffff"; x.fillRect(178,178,44,44);
+    }, n),
+    null,  /* lattice: procedural */
+    sample(400, 400, function(x){
+      x.lineWidth = 16; x.beginPath(); x.arc(185,185,118,0,7); x.stroke();
+      x.beginPath(); x.moveTo(262,262); x.lineTo(345,345); x.stroke();
+      for (var i=-1;i<=1;i++) for (var j=-1;j<=1;j++){ x.fillStyle = (i===0&&j===0) ? "#00ffff" : "#fff"; x.beginPath(); x.arc(185+i*42,185+j*42,(i===0&&j===0)?16:10,0,7); x.fill(); }
+    }, n)
+  ];
+  var L = shapes[1];
+  shapes[3] = L.map(function(p, i){
+    var ang = Math.atan2(p[1]+.05, p[0]) + (Math.random()-.5)*.6, r = .18 + Math.random()*.62;
+    return [p[0] + Math.cos(ang)*r, p[1] + Math.sin(ang)*r + .12, 0, Math.random()];
+  });
+  var lat = [], b1=[.19,.035], b2=[.07,.17];
+  for (var a=-9;a<=9;a++) for (var b=-9;b<=9;b++){ var lx=a*b1[0]+b*b2[0], ly=a*b1[1]+b*b2[1]; if (lx*lx+ly*ly<1) lat.push([lx,ly]); }
+  shapes[5] = []; for (var k=0;k<n;k++){ var q=lat[k%lat.length]; var g=(Math.random()+Math.random()+Math.random()-1.5)*.018; shapes[5].push([q[0]+g, q[1]+(Math.random()-.5)*.03, Math.random()<.78?1:0]); }
+}
+
+/* ---- layout per scene ---- */
+function place(s){
+  if (s === 0) return { cx: W/2, cy: H*(mobile?.4:.44), sc: Math.min(W*.44, 760*DPR) };
+  if (s === 6 && mobile) return { cx: W/2, cy: H*.19, sc: Math.min(W*.3, H*.12) };
+  if (s === 6 && !mobile) return { cx: W*.28, cy: H*.5, sc: Math.min(W,H)*.3 };
+  if (mobile) return { cx: W/2, cy: H*.3, sc: Math.min(W*.38, H*.2) };
+  if (s === 2) return { cx: W*.2, cy: H*.5, sc: Math.min(W, H)*.31 };
+  return { cx: W*(s % 2 ? .7 : .3), cy: H*.5, sc: Math.min(W, H)*.31 };
+}
+
+function init(){
+  W = cv.width = Math.floor(innerWidth*DPR); H = cv.height = Math.floor(innerHeight*DPR);
+  mobile = innerWidth < 900;
+  var target = Math.round(Math.min(5200, Math.max(1800, innerWidth*innerHeight/260)));
+  if (target !== N){
+    N = target; DUST = Math.round(N*.07); P = [];
+    for (var i=0;i<N;i++) P.push({ x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, ph:Math.random()*6.283, a:0, k:Math.random(), dust:i>=N-DUST, lane:(Math.random()*26)|0, off:Math.random(), vault:[Math.random(),Math.random()] });
+  }
+  build();
+  if (reduce) settle();
+}
+
+function target(i, p, t, L){
+  var s = scene, sh = shapes[s];
+  if (s === 2){
+    var ph = (p.off + t*.00007*(0.7+p.k*.6)) % 1;
+    var ly = (p.lane/25 - .5) * 1.5;
+    if (i % 6 === 0){
+      var e = p.k*4, u = p.vault[0]*2-1;
+      var vx = e<1? .55+u*.0+ (p.vault[1]*.45) : e<2? .55+p.vault[1]*.45 : e<3? .55 : 1.0;
+      var vy = e<1? -.42 : e<2? .42 : (p.vault[1]*.84-.42);
+      return [L.cx + vx*L.sc, L.cy + vy*L.sc, 1];
+    }
+    if (ph > .82) return [L.cx + (.6 + p.vault[0]*.36)*L.sc, L.cy + (p.vault[1]*.76-.38)*L.sc, 0];
+    var tx = -1.9 + ph*2.5, wave = Math.sin(ph*6 + p.lane)*.05;
+    var conv = Math.pow(ph/.82, 2.2);
+    return [L.cx + tx*L.sc, L.cy + (ly*(1-conv) + wave*(1-conv))*L.sc, 0];
+  }
+  var q = sh[i];
+  if (s === 3){
+    var drift = Math.sin(t*.0004 + q[3]*6.28)*.03;
+    return [L.cx + (q[0] + drift)*L.sc, L.cy + (q[1] + Math.cos(t*.0003+q[3]*9)*.03)*L.sc, 0];
+  }
+  if (s === 5){
+    var r = t*.00004, c = Math.cos(r), sn = Math.sin(r);
+    return [L.cx + (q[0]*c - q[1]*sn)*L.sc, L.cy + (q[0]*sn + q[1]*c)*L.sc, q[2]];
+  }
+  return [L.cx + q[0]*L.sc, L.cy + q[1]*L.sc, q[2]];
+}
+
+function settle(){
+  var L = place(scene);
+  for (var i=0;i<P.length;i++){ var p=P[i]; if (p.dust) continue; var g=target(i,p,0,L); p.x=g[0]; p.y=g[1]; p.a=g[2]; }
+  draw(0, true);
+}
+
+function draw(t, still){
+  if (still){ ctx.fillStyle = "#000"; ctx.fillRect(0,0,W,H); }
+  else { ctx.fillStyle = "rgba(0,0,0,.28)"; ctx.fillRect(0,0,W,H); }
+  var L = place(scene), d = 1.3*DPR, md = 110*DPR, spring = scene===3 ? .010 : .022, damp = scene===3 ? .9 : .84;
+  for (var i=0;i<P.length;i++){
+    var p = P[i];
+    if (p.dust){
+      if (!still){ p.x += Math.cos(p.ph + t*.0001)*.25*DPR; p.y -= .12*DPR*(.5+p.k); if (p.y < -5) { p.y = H+5; p.x = Math.random()*W; } }
+      ctx.globalAlpha = .12 + .14*Math.sin(t*.001 + p.ph); ctx.fillStyle = "#fff"; ctx.fillRect(p.x, p.y, d, d); continue;
+    }
+    var g = target(i, p, t, L);
+    if (!still){
+      p.vx += (g[0]-p.x)*spring; p.vy += (g[1]-p.y)*spring;
+      var dx = p.x - mouse.x, dy = p.y - mouse.y, dd = dx*dx+dy*dy;
+      if (dd < md*md){ var f = (1 - Math.sqrt(dd)/md)*2.2; var m = Math.sqrt(dd)||1; p.vx += dx/m*f; p.vy += dy/m*f; }
+      p.vx *= damp; p.vy *= damp; p.x += p.vx; p.y += p.vy;
+      p.a += (g[2] - p.a)*.05;
+    }
+    var tw = .5 + .5*Math.sin(t*.0012 + p.ph);
+    var sp = Math.min(1, Math.abs(p.vx)+Math.abs(p.vy))*.4;
+    if (p.a > .5){ ctx.fillStyle = "rgb("+ACC[0]+","+ACC[1]+","+ACC[2]+")"; ctx.globalAlpha = .55 + .45*tw; ctx.fillRect(p.x, p.y, d*1.3, d*1.3); }
+    else { ctx.fillStyle = "#fff"; ctx.globalAlpha = (scene===3 ? .28 : .42) + .38*tw + sp; ctx.fillRect(p.x, p.y, d, d); }
+  }
+  ctx.globalAlpha = 1;
+}
+
+function loop(t){
+  if (!document.hidden) draw(t, false);
+  requestAnimationFrame(loop);
+}
+
+/* ---- scene control ---- */
+function setScene(k){
+  if (k === scene) return;
+  var prev = scene; scene = k;
+  cards.forEach(function(c){ c.classList.toggle("on", +c.dataset.i === k); });
+  rail.forEach(function(b){ b.setAttribute("aria-current", String(+b.dataset.i === k)); });
+  if (k === 3 && !reduce){ var L = place(3); P.forEach(function(p){ if (p.dust) return; var dx=p.x-L.cx, dy=p.y-L.cy, m=Math.sqrt(dx*dx+dy*dy)||1; p.vx += dx/m*(6+Math.random()*14)*DPR; p.vy += dy/m*(6+Math.random()*14)*DPR - 4*DPR; }); }
+  if (k === 0 && prev !== 0 && !reduce){ P.forEach(function(p){ p.vx += (Math.random()-.5)*20; p.vy += (Math.random()-.5)*20; }); }
+  if (reduce) settle();
+}
+var yr = document.getElementById("yr"), yrbar = document.getElementById("yrbar");
+function onScroll(){
+  var mid = innerHeight*.5, k = 0;
+  spacers.forEach(function(s, i){ var r = s.getBoundingClientRect(); if (r.top <= mid) k = i; });
+  setScene(k);
+  var r4 = spacers[4].getBoundingClientRect();
+  var pr = Math.min(1, Math.max(0, (mid - r4.top) / r4.height));
+  var y = Math.round(2026 + pr*16); yr.textContent = y; yrbar.style.width = (pr*100) + "%";
+}
+addEventListener("scroll", onScroll, { passive:true });
+rail.forEach(function(b){ b.addEventListener("click", function(){ spacers[+b.dataset.i].scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }); });
+document.querySelectorAll('a[href^="#s"]').forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); var t = document.querySelector(a.getAttribute("href")); if (t) t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }); });
+
+addEventListener("pointermove", function(e){ mouse.x = e.clientX*DPR; mouse.y = e.clientY*DPR; }, { passive:true });
+addEventListener("pointerleave", function(){ mouse.x = mouse.y = -9999; });
+document.addEventListener("pointerout", function(e){ if (!e.relatedTarget){ mouse.x = mouse.y = -9999; } });
+
+var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){ init(); onScroll(); }, 150); });
+
+init(); onScroll();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ build(); if (reduce) settle(); });
+if (reduce) settle(); else requestAnimationFrame(loop);
+
+document.getElementById("cy").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
